@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | Drop The Beat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-bg: #1b1b2f;
+      --secondary-bg: #162447;
+      --accent-color: #e43f5a;
+      --text-color: #f1f1f1;
+      --text-secondary: #b8b8b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--primary-bg);
+      color: var(--text-color);
+      min-height: 100vh;
+      padding: 2rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Floating music notes */
+    .music-note {
+      position: absolute;
+      color: rgba(228, 63, 90, 0.2);
+      font-size: 2rem;
+      animation: float 8s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(15deg); }
+    }
+
+    .profile-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(22, 36, 71, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 3rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(228, 63, 90, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .profile-img-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--accent-color);
+      box-shadow: 0 5px 20px rgba(228, 63, 90, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .profile-img:hover {
+      transform: scale(1.05);
+    }
+
+    .upload-overlay {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: var(--accent-color);
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .profile-img-container:hover .upload-overlay {
+      opacity: 1;
+    }
+
+    .profile-info {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .profile-name {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, #e43f5a, #ff7b54);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .profile-tagline {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-link {
+      color: var(--text-color);
+      background: rgba(27, 27, 47, 0.5);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .social-link:hover {
+      background: var(--accent-color);
+      transform: translateY(-3px);
+    }
+
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-color);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      background: var(--accent-color);
+      bottom: -8px;
+      left: 0;
+    }
+
+    .bio-content {
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    .tracks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .track-card {
+      background: rgba(27, 27, 47, 0.5);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(228, 63, 90, 0.2);
+    }
+
+    .track-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .track-icon {
+      color: var(--accent-color);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .track-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .track-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .edit-btns {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, var(--accent-color), #ff7b54);
+      color: white;
+      box-shadow: 0 4px 15px rgba(228, 63, 90, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(228, 63, 90, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(27, 27, 47, 0.5);
+      color: var(--text-color);
+      border: 1px solid rgba(228, 63, 90, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(228, 63, 90, 0.1);
+    }
+
+    /* Edit mode styles */
+    .hidden {
+      display: none;
+    }
+
+    .edit-input {
+      width: 100%;
+      padding: 0.8rem;
+      background: rgba(27, 27, 47, 0.5);
+      border: 1px solid rgba(228, 63, 90, 0.3);
+      border-radius: 8px;
+      color: var(--text-color);
+      margin-bottom: 1rem;
+      font-size: inherit;
+    }
+
+    .edit-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 0.8rem;
+      background: rgba(27, 27, 47, 0.5);
+      border: 1px solid rgba(228, 63, 90, 0.3);
+      border-radius: 8px;
+      color: var(--text-color);
+      margin-bottom: 1rem;
+      font-size: inherit;
+      resize: vertical;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+
+      .stats {
+        justify-content: center;
+      }
+    }
+
+    /* Animation for sections */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .profile-header,
+    .section {
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .section:nth-child(1) { animation-delay: 0.1s; }
+    .section:nth-child(2) { animation-delay: 0.2s; }
+    .section:nth-child(3) { animation-delay: 0.3s; }
+  </style>
+</head>
+<body>
+  <!-- Floating music notes -->
+  <i class="music-note fas fa-music" style="top: 15%; left: 10%; animation-delay: 0s;"></i>
+  <i class="music-note fas fa-music" style="top: 75%; left: 15%; animation-delay: 1s;"></i>
+  <i class="music-note fas fa-music" style="top: 40%; left: 85%; animation-delay: 2s;"></i>
+  <i class="music-note fas fa-music" style="top: 85%; left: 80%; animation-delay: 1.5s;"></i>
+  <i class="music-note fas fa-music" style="top: 10%; left: 50%; animation-delay: 0.5s;"></i>
+
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-img-container">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Profile" class="profile-img">
+        <div class="upload-overlay">
+          <i class="fas fa-camera"></i>
+        </div>
+      </div>
+      
+      <div class="profile-info">
+        <h1 class="profile-name" id="nameDisplay">John Melody</h1>
+        <input type="text" id="nameInput" class="edit-input hidden" value="John Melody">
+
+        <p class="profile-tagline" id="descDisplay">🎸 Indie Rock | 🎤 Vocalist | 🎶 Songwriter</p>
+        <input type="text" id="descInput" class="edit-input hidden" value="🎸 Indie Rock | 🎤 Vocalist | 🎶 Songwriter">
+
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-spotify"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-soundcloud"></i></a>
+        </div>
+
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-number">1.2K</div>
+            <div class="stat-label">Followers</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">45</div>
+            <div class="stat-label">Tracks</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">12</div>
+            <div class="stat-label">Events</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section bio">
+      <h2 class="section-title">About Me</h2>
+      <p class="bio-content" id="bioDisplay">Hello! I'm John Melody, an indie rock musician from Melbourne. I write and produce music that blends soulful lyrics with raw guitar riffs. My sound is inspired by artists like Radiohead, The Strokes, and Tame Impala. I'm here to share my musical journey, upcoming gigs, and latest tracks. Currently working on my debut album "Echoes of Silence" set to release next spring. Let's connect and make some beautiful noise together! 🎵</p>
+      <textarea id="bioInput" class="edit-textarea hidden">Hello! I'm John Melody, an indie rock musician from Melbourne. I write and produce music that blends soulful lyrics with raw guitar riffs. My sound is inspired by artists like Radiohead, The Strokes, and Tame Impala. I'm here to share my musical journey, upcoming gigs, and latest tracks. Currently working on my debut album "Echoes of Silence" set to release next spring. Let's connect and make some beautiful noise together! 🎵</textarea>
+    </div>
+
+    <div class="section music-section">
+      <h2 class="section-title">Featured Tracks</h2>
+      <div class="tracks-grid">
+        <div class="track-card">
+          <div class="track-icon"><i class="fas fa-music"></i></div>
+          <h3 class="track-title">Dream in Shadows</h3>
+          <p class="track-meta">Indie Rock • 3:45 • 12K plays</p>
+        </div>
+        <div class="track-card">
+          <div class="track-icon"><i class="fas fa-music"></i></div>
+          <h3 class="track-title">Rainy Days</h3>
+          <p class="track-meta">Alternative • 4:12 • 8.5K plays</p>
+        </div>
+        <div class="track-card">
+          <div class="track-icon"><i class="fas fa-music"></i></div>
+          <h3 class="track-title">Echoes of Silence</h3>
+          <p class="track-meta">Experimental • 5:30 • 6.2K plays</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="edit-btns">
+      <button id="editBtn" class="btn btn-primary">Edit Profile</button>
+      <button id="saveBtn" class="btn btn-primary hidden">Save Changes</button>
+      <button id="cancelBtn" class="btn btn-secondary hidden">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    // Add more floating music notes dynamically
+    document.addEventListener('DOMContentLoaded', function() {
+      const body = document.querySelector('body');
+      
+      // Create more music notes
+      for (let i = 0; i < 5; i++) {
+        const note = document.createElement('i');
+        note.className = 'music-note fas fa-music';
+        
+        // Random positioning and animation
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 5;
+        const duration = 5 + Math.random() * 5;
+        const size = 1 + Math.random() * 2;
+        
+        note.style.top = `${top}%`;
+        note.style.left = `${left}%`;
+        note.style.animationDelay = `${delay}s`;
+        note.style.animationDuration = `${duration}s`;
+        note.style.fontSize = `${size}rem`;
+        note.style.opacity = 0.1 + Math.random() * 0.2;
+        
+        body.appendChild(note);
+      }
+
+      // Profile edit functionality
+      const nameDisplay = document.getElementById('nameDisplay');
+      const nameInput = document.getElementById('nameInput');
+      const descDisplay = document.getElementById('descDisplay');
+      const descInput = document.getElementById('descInput');
+      const bioDisplay = document.getElementById('bioDisplay');
+      const bioInput = document.getElementById('bioInput');
+
+      const editBtn = document.getElementById('editBtn');
+      const saveBtn = document.getElementById('saveBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+
+      editBtn.addEventListener('click', () => {
+        toggleEdit(true);
+      });
+
+      saveBtn.addEventListener('click', () => {
+        nameDisplay.textContent = nameInput.value;
+        descDisplay.textContent = descInput.value;
+        bioDisplay.textContent = bioInput.value;
+        toggleEdit(false);
+      });
+
+      cancelBtn.addEventListener('click', () => {
+        // Revert to original values
+        nameInput.value = nameDisplay.textContent;
+        descInput.value = descDisplay.textContent;
+        bioInput.value = bioDisplay.textContent;
+        toggleEdit(false);
+      });
+
+      function toggleEdit(editing) {
+        nameDisplay.classList.toggle('hidden', editing);
+        nameInput.classList.toggle('hidden', !editing);
+
+        descDisplay.classList.toggle('hidden', editing);
+        descInput.classList.toggle('hidden', !editing);
+
+        bioDisplay.classList.toggle('hidden', editing);
+        bioInput.classList.toggle('hidden', !editing);
+
+        editBtn.classList.toggle('hidden', editing);
+        saveBtn.classList.toggle('hidden', !editing);
+        cancelBtn.classList.toggle('hidden', !editing);
+      }
+
+      // Image upload overlay
+      const uploadOverlay = document.querySelector('.upload-overlay');
+      uploadOverlay.addEventListener('click', function() {
+        alert('Profile picture upload functionality would go here');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discussion | Drop The Beat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-bg: #1b1b2f;
+      --secondary-bg: #162447;
+      --accent-color: #e43f5a;
+      --text-color: #f1f1f1;
+      --text-secondary: #b8b8b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--primary-bg);
+      color: var(--text-color);
+      padding: 2rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Floating music notes */
+    .music-note {
+      position: absolute;
+      color: rgba(228, 63, 90, 0.1);
+      font-size: 2rem;
+      animation: float 8s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(15deg); }
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(22, 36, 71, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(228, 63, 90, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #e43f5a, #ff7b54);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .thread-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .thread-meta .author {
+      color: var(--accent-color);
+      font-weight: 600;
+      margin-right: 1rem;
+    }
+
+    .thread-content {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--text-color);
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(228, 63, 90, 0.2);
+    }
+
+    .comment-section {
+      margin-top: 2rem;
+    }
+
+    .comment-section h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .comment-section h3::after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      background: var(--accent-color);
+      bottom: -8px;
+      left: 0;
+    }
+
+    .comment {
+      background: rgba(27, 27, 47, 0.5);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      border-left: 4px solid var(--accent-color);
+      transition: transform 0.3s ease;
+    }
+
+    .comment:hover {
+      transform: translateX(5px);
+    }
+
+    .comment-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .comment-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-weight: bold;
+      color: white;
+    }
+
+    .comment-author {
+      font-weight: 600;
+      color: var(--accent-color);
+    }
+
+    .comment-time {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-left: auto;
+    }
+
+    .comment-content {
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+
+    .comment-form {
+      margin-top: 3rem;
+      background: rgba(27, 27, 47, 0.5);
+      padding: 2rem;
+      border-radius: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(27, 27, 47, 0.8);
+      border: 1px solid rgba(228, 63, 90, 0.3);
+      border-radius: 8px;
+      color: var(--text-color);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(228, 63, 90, 0.2);
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      background: linear-gradient(45deg, var(--accent-color), #ff7b54);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 15px rgba(228, 63, 90, 0.3);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(228, 63, 90, 0.4);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      
+      .container {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Animation for comments */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .comment {
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .comment:nth-child(1) { animation-delay: 0.1s; }
+    .comment:nth-child(2) { animation-delay: 0.2s; }
+    .comment:nth-child(3) { animation-delay: 0.3s; }
+    .comment:nth-child(4) { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+  <!-- Floating music notes -->
+  <i class="music-note fas fa-music" style="top: 15%; left: 10%; animation-delay: 0s;"></i>
+  <i class="music-note fas fa-music" style="top: 75%; left: 15%; animation-delay: 1s;"></i>
+  <i class="music-note fas fa-music" style="top: 40%; left: 85%; animation-delay: 2s;"></i>
+  <i class="music-note fas fa-music" style="top: 85%; left: 80%; animation-delay: 1.5s;"></i>
+
+  <div class="container">
+    <h2>Best Guitar Solos of All Time</h2>
+    
+    <div class="thread-meta">
+      <span class="author">Posted by GuitarHero92</span>
+      <span>• 2 days ago • 24 comments</span>
+    </div>
+    
+    <div class="thread-content">
+      <p>Let's discuss the most iconic guitar solos in rock history! From Hendrix to Slash, which solos give you chills every time you hear them? Personally, I think Comfortably Numb by Pink Floyd is untouchable, but I'd love to hear your thoughts!</p>
+    </div>
+
+    <div class="comment-section">
+      <h3>Comments</h3>
+      
+      <div class="comment">
+        <div class="comment-header">
+          <div class="comment-avatar">R</div>
+          <span class="comment-author">RockFan99</span>
+          <span class="comment-time">1 day ago</span>
+        </div>
+        <div class="comment-content">
+          <p>Stairway to Heaven solo is pure magic! The way it builds up is just perfection. Also love the solo in Hotel California - the harmonies are incredible.</p>
+        </div>
+      </div>
+      
+      <div class="comment">
+        <div class="comment-header">
+          <div class="comment-avatar">M</div>
+          <span class="comment-author">MetalHead</span>
+          <span class="comment-time">20 hours ago</span>
+        </div>
+        <div class="comment-content">
+          <p>For technical brilliance, you can't beat Tornado of Souls by Megadeth. Marty Friedman's phrasing is out of this world!</p>
+        </div>
+      </div>
+      
+      <div class="comment">
+        <div class="comment-header">
+          <div class="comment-avatar">B</div>
+          <span class="comment-author">BluesLover</span>
+          <span class="comment-time">15 hours ago</span>
+        </div>
+        <div class="comment-content">
+          <p>While we're talking about solos, let's not forget the blues masters! BB King's solo in The Thrill Is Gone is a masterclass in emotion and phrasing.</p>
+        </div>
+      </div>
+    </div>
+
+    <form class="comment-form">
+      <div class="form-group">
+        <label for="username">Your Name</label>
+        <input type="text" id="username" class="form-control" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="comment">Join the Discussion</label>
+        <textarea id="comment" class="form-control" rows="5" required></textarea>
+      </div>
+      
+      <button type="submit" class="submit-btn">Post Comment</button>
+    </form>
+  </div>
+
+  <script>
+    // Add more floating music notes dynamically
+    document.addEventListener('DOMContentLoaded', function() {
+      const body = document.querySelector('body');
+      
+      // Create more music notes
+      for (let i = 0; i < 5; i++) {
+        const note = document.createElement('i');
+        note.className = 'music-note fas fa-music';
+        
+        // Random positioning and animation
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 5;
+        const duration = 5 + Math.random() * 5;
+        const size = 1 + Math.random() * 2;
+        
+        note.style.top = `${top}%`;
+        note.style.left = `${left}%`;
+        note.style.animationDelay = `${delay}s`;
+        note.style.animationDuration = `${duration}s`;
+        note.style.fontSize = `${size}rem`;
+        note.style.opacity = 0.1 + Math.random() * 0.2;
+        
+        body.appendChild(note);
+      }
+
+      // Form submission handling
+      const commentForm = document.querySelector('.comment-form');
+      const commentSection = document.querySelector('.comment-section');
+      
+      commentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const commentText = document.getElementById('comment').value;
+        
+        if (username && commentText) {
+          // Create new comment element
+          const newComment = document.createElement('div');
+          newComment.className = 'comment';
+          newComment.innerHTML = `
+            <div class="comment-header">
+              <div class="comment-avatar">${username.charAt(0).toUpperCase()}</div>
+              <span class="comment-author">${username}</span>
+              <span class="comment-time">Just now</span>
+            </div>
+            <div class="comment-content">
+              <p>${commentText}</p>
+            </div>
+          `;
+          
+          // Add animation to new comment
+          newComment.style.opacity = 0;
+          newComment.style.transform = 'translateY(20px)';
+          newComment.style.animation = 'fadeIn 0.6s ease forwards';
+          
+          // Insert new comment at the top
+          commentSection.insertBefore(newComment, commentSection.children[1]);
+          
+          // Reset form
+          commentForm.reset();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
