@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Drop The Beat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="components/navbar/navbar.css">
+    <link rel="stylesheet" href="components/footer/footer.css">
+    <style>
+        :root {
+            --primary-bg: #1b1b2f;
+            --secondary-bg: #162447;
+            --accent-color: #e43f5a;
+            --text-color: #f1f1f1;
+            --text-secondary: #b8b8b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px; /* Added for when navbar is fixed */
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(27, 27, 47, 0.7) 0%, rgba(27, 27, 47, 1) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #e43f5a, #ff7b54);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--accent-color), #ff7b54);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(228, 63, 90, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(228, 63, 90, 0.4);
+        }
+
+        .music-note {
+            position: absolute;
+            color: rgba(228, 63, 90, 0.2);
+            font-size: 2rem;
+            animation: float 5s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            display: inline-block;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 3px;
+            background: var(--accent-color);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.03);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--accent-color);
+            border-radius: 10px;
+            top: 20px;
+            left: 20px;
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+
+        .about-image:hover::before {
+            top: 15px;
+            left: 15px;
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 100px 0;
+            background-color: var(--secondary-bg);
+        }
+
+        .team-members {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .team-member {
+            background: var(--primary-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            width: 280px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .member-image {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .team-member:hover .member-image img {
+            transform: scale(1.1);
+        }
+
+        .member-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .member-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .member-info p {
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            background: var(--secondary-bg);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* Mission Section */
+        .mission-section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .mission-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .mission-card {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 40px 30px;
+            width: 350px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--accent-color);
+            transition: height 0.3s ease;
+            z-index: -1;
+        }
+
+        .mission-card:hover::before {
+            height: 100%;
+        }
+
+        .mission-card i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+            transition: color 0.3s ease;
+        }
+
+        .mission-card:hover i {
+            color: white;
+        }
+
+        .mission-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .mission-card p {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .mission-card:hover h3,
+        .mission-card:hover p {
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                height: auto;
+                padding: 120px 0 60px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .about-content {
+                flex-direction: column;
+            }
+
+            .about-text {
+                order: 2;
+            }
+
+            .about-image {
+                order: 1;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Dynamic Elements */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .rotate {
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar"></div>
+    <section class="hero">
+        <!-- Music notes floating in background -->
+        <i class="music-note fas fa-music" style="top: 20%; left: 10%; animation-delay: 0s;"></i>
+        <i class="music-note fas fa-music" style="top: 70%; left: 15%; animation-delay: 1s;"></i>
+        <i class="music-note fas fa-music" style="top: 40%; left: 85%; animation-delay: 2s;"></i>
+        <i class="music-note fas fa-music" style="top: 80%; left: 80%; animation-delay: 1.5s;"></i>
+        <i class="music-note fas fa-music" style="top: 10%; left: 50%; animation-delay: 0.5s;"></i>
+        
+        <div class="container">
+            <div class="hero-content">
+                <h1>Our Passion for Music Moves the World</h1>
+                <p>At Drop The Beat, we believe music is the universal language that connects us all. Join us on our journey to discover, create, and share the sounds that move your soul.</p>
+                <a href="#" class="btn pulse">Join Our Community</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Story</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>From Garage to Global</h3>
+                    <p>Founded in 2015, Drop The Beat began as a small collective of music enthusiasts in a garage studio. What started as a passion project quickly grew into a thriving community of artists, producers, and music lovers.</p>
+                    <p>Today, we're proud to be one of the leading platforms for discovering emerging talent and connecting artists with their audiences worldwide. Our team spans across 15 countries, united by our love for music.</p>
+                    <p>We've hosted over 500 events, worked with 2000+ artists, and reached millions of music lovers through our digital platforms. But our journey is just beginning.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Our team in the studio">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Meet The Team</h2>
+            </div>
+            <div class="team-members">
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Alex Johnson">
+                    </div>
+                    <div class="member-info">
+                        <h3>Alex Johnson</h3>
+                        <p>Founder & CEO</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Sarah Chen">
+                    </div>
+                    <div class="member-info">
+                        <h3>Sarah Chen</h3>
+                        <p>Creative Director</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Marcus Lee">
+                    </div>
+                    <div class="member-info">
+                        <h3>Marcus Lee</h3>
+                        <p>Head of A&R</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mission-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Mission</h2>
+            </div>
+            <div class="mission-cards">
+                <div class="mission-card">
+                    <i class="fas fa-globe rotate"></i>
+                    <h3>Connect</h3>
+                    <p>Bringing artists and fans together through shared musical experiences across the globe.</p>
+                </div>
+                <div class="mission-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Innovate</h3>
+                    <p>Pushing boundaries with cutting-edge technology to revolutionize how music is created and shared.</p>
+                </div>
+                <div class="mission-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Inspire</h3>
+                    <p>Empowering the next generation of musicians to find their voice and share it with the world.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add floating music notes dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroSection = document.querySelector('.hero');
+            
+            // Create more music notes
+            for (let i = 0; i < 8; i++) {
+                const note = document.createElement('i');
+                note.className = 'music-note fas fa-music';
+                
+                // Random positioning
+                const top = Math.random() * 100;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 3;
+                const duration = 3 + Math.random() * 4;
+                
+                note.style.top = `${top}%`;
+                note.style.left = `${left}%`;
+                note.style.animationDelay = `${delay}s`;
+                note.style.animationDuration = `${duration}s`;
+                
+                heroSection.appendChild(note);
+            }
+            
+            // Add scroll animation to mission cards
+            const missionCards = document.querySelectorAll('.mission-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            missionCards.forEach((card, index) => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = `opacity 0.5s ease ${index * 0.2}s, transform 0.5s ease ${index * 0.2}s`;
+                observer.observe(card);
+            });
+        });
+    </script>
+    <div id="footer"></div>
+
+    <script src="/components/include.js"></script>
+</body>
+</html>
